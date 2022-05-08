@@ -36,3 +36,25 @@ class Solution:
                     dp[i][j] = max(getDP(i + 1, j), getDP(i, j + 1))
                 
         return dp[0][0]
+
+     def longestCommonSubsequenceV2(self, text1: str, text2: str) -> int:
+        m = len(text1)
+        n = len(text2)
+
+        dp = [0] * (n + 1)
+
+        for i in range(m - 1, -1, -1):
+            prev_diag = dp[-1]
+            for j in range(n - 1, -1, -1):
+                if text1[i] == text2[j]:
+                    tmp = dp[j]
+                    dp[j] = prev_diag + 1
+                    prev_diag = tmp
+                else:
+                    # only one of text1[i] and text2[j] can be part of the solution,
+                    # since no crossing lines allowed
+                    tmp = dp[j]
+                    dp[j] = max(dp[j], dp[j + 1])
+                    prev_diag = tmp
+
+        return dp[0]
